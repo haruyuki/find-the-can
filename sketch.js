@@ -88,6 +88,7 @@ function generateBookshelf() {
     let bookHeightOffset = 0;
     const bookSelection = i * 15;
     for (let j = bookSelection; j < bookSelection + 15; j ++) {
+      noStroke();
       const book = books[j];
       bookHeightOffset += book.height;
       if (book.placementOffset === undefined) {
