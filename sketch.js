@@ -65,9 +65,9 @@ function generateBookshelf() {
   const outerY = floorSeed - bookshelfHeight;
   const innerX = outerX + bookshelfThickness;
   const innerY = outerY + bookshelfThickness;
-  rect(outerX, outerY, bookshelfLength + (bookshelfThickness * 2), bookshelfHeight);
+  rect(outerX, outerY, bookshelfLength + bookshelfThickness, bookshelfHeight);
   fill(transparent);
-  rect(innerX, innerY, bookshelfLength, bookshelfHeight - 20);
+  rect(innerX, innerY, bookshelfLength - 10, bookshelfHeight - 20);
 
   const shelfLength = bookshelfLength / 4;
   if (!booksGenerated) {
@@ -91,7 +91,7 @@ function generateBookshelf() {
       const book = books[j];
       bookHeightOffset += book.height;
       if (book.placementOffset === undefined) {
-        book.placementOffset = shelfWidth + random(0, shelfLength - book.width);
+        book.placementOffset = shelfWidth + random(0, shelfLength - book.width - bookshelfThickness);
       }
       fill(book.colour);
       rect(book.placementOffset, floorSeed - bookshelfThickness - bookHeightOffset, book.width, book.height);
