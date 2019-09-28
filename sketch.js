@@ -4,6 +4,7 @@ let transparent;
 const wallColour = '#faf0dc';
 const floorColour = '#cd9169';
 const bookshelfColour = '#fbfaf8';
+const bookshelfOffsetColour = '#ccc0a8';
 const tableColour = '#d5a16a';
 let bookColours = [];
 let books = [];
@@ -52,7 +53,7 @@ function generateBookshelf() {
 
   fill(bookshelfColour);
   strokeWeight(3);
-  stroke('#ccc0a8');
+  stroke(bookshelfOffsetColour);
   let bookshelfPlacement;
   const bookshelfLength = (windowWidth * 0.5);
   const bookshelfHeight = (windowHeight * 0.5);
@@ -83,7 +84,7 @@ function generateBookshelf() {
   for (let i = 0; i < 4; i++) {
     const shelfWidth = innerX + (i * shelfLength);
     fill(bookshelfColour);
-    stroke('#ccc0a8');
+    stroke(bookshelfOffsetColour);
     rect(shelfWidth - bookshelfThickness, innerY, 10, bookshelfHeight - 20);
     let bookHeightOffset = 0;
     const bookSelection = i * 15;
