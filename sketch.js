@@ -1,4 +1,4 @@
-let floorSeed, bookshelfSeed, tableSeed;
+let floorSeed, tableSeed;
 
 let transparent;
 const wallColour = '#faf0dc';
@@ -8,6 +8,7 @@ const tableColour = '#d5a16a';
 let bookColours = [];
 let books = [];
 let booksGenerated = false;
+let bookshelfLocationGenerated = false;
 
 function preload() {
   // load any assets (images, sounds etc.) here
@@ -22,7 +23,6 @@ function setup() {
   }
   background(wallColour);
   floorSeed = random(windowHeight - (windowHeight * 0.2), windowHeight - (windowHeight * 0.1));
-  bookshelfSeed = random(0, windowWidth - (windowWidth * 0.15));
   tableSeed = random(0, windowWidth - (windowWidth * 0.15));
 }
 
@@ -53,14 +53,18 @@ function generateBookshelf() {
   fill(bookshelfColour);
   strokeWeight(3);
   stroke('#ccc0a8');
+  let bookshelfPlacement;
   const bookshelfLength = (windowWidth * 0.5);
   const bookshelfHeight = (windowHeight * 0.5);
+  if (!bookshelfLocationGenerated) {
+    bookshelfLocationGenerated = true;
+    bookshelfPlacement = random(0, windowWidth - bookshelfLength);
+  }
   const bookshelfThickness = 10;
-  const outerX = bookshelfSeed;
+  const outerX = bookshelfPlacement;
   const outerY = floorSeed - bookshelfHeight;
   const innerX = outerX + bookshelfThickness;
   const innerY = outerY + bookshelfThickness;
-
   rect(outerX, outerY, bookshelfLength + (bookshelfThickness * 2), bookshelfHeight);
   fill(transparent);
   rect(innerX, innerY, bookshelfLength, bookshelfHeight - 20);
