@@ -63,7 +63,7 @@ function generateBookshelf() {
   stroke(bookshelfOffsetColour);
   let bookshelfPlacement;
   const bookshelfLength = (windowWidth * 0.5);
-  const bookshelfHeight = (windowHeight * 0.5);
+  const bookshelfHeight = (windowHeight * 0.4);
   if (!bookshelfLocationGenerated) {
     bookshelfLocationGenerated = true;
     bookshelfPlacement = random(0, windowWidth - bookshelfLength);
@@ -140,7 +140,7 @@ function generatePainting() {
     paintingWidth = random(windowWidth * 0.05, windowWidth * 0.3);
     paintingHeight = random(windowWidth * 0.05, windowWidth * 0.15);
     paintingPlacementX = random(0, windowWidth - paintingWidth);
-    paintingPlacementY = random(0, windowHeight * 0.3);
+    paintingPlacementY = random(0, windowHeight * 0.2);
   }
   const paintingFrameThickness = 10;
   const pictureX = paintingPlacementX + paintingFrameThickness;
