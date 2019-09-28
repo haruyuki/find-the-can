@@ -6,10 +6,16 @@ const floorColour = '#cd9169';
 const bookshelfColour = '#fbfaf8';
 const bookshelfOffsetColour = '#ccc0a8';
 const tableColour = '#d5a16a';
+const paintingFrameColour = '#eeeeee';
+const paintingFrameOffsetColour = '#c8c8c8';
+const pictureSkyColour = '#87ceeb';
 let bookColours = [];
 let books = [];
+let lines = [];
 let booksGenerated = false;
 let bookshelfLocationGenerated = false;
+let paintingSizeGenerated = false;
+let paintingLinesGenerated = false;
 
 function preload() {
   // load any assets (images, sounds etc.) here
@@ -33,6 +39,7 @@ function draw() {
 }
 
 function livingRoom() {
+  generatePainting();
   generateBookshelf();
   generateTable();
   generateFloor();
@@ -112,4 +119,54 @@ function generateTable() {
   rect(baseX, baseY, tableThickness, tableHeight);
   rect(baseX, baseY, tableLength, tableThickness);
   rect(baseX + tableLength - tableThickness, baseY, tableThickness, tableHeight);
+}
+
+function generatePainting() {
+  function DrawnLine(x1, y1, x2, y2, colour) {
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.colour = colour;
+  }
+
+  fill(paintingFrameColour);
+  strokeWeight(5);
+  stroke(paintingFrameOffsetColour);
+
+  let paintingWidth, paintingHeight, paintingPlacementX, paintingPlacementY;
+  if (!paintingSizeGenerated) {
+    paintingSizeGenerated = true;
+    paintingWidth = random(windowWidth * 0.05, windowWidth * 0.3);
+    paintingHeight = random(windowWidth * 0.05, windowWidth * 0.15);
+    paintingPlacementX = random(0, windowWidth - paintingWidth);
+    paintingPlacementY = random(0, windowHeight * 0.3);
+  }
+  const paintingFrameThickness = 10;
+  const pictureX = paintingPlacementX + paintingFrameThickness;
+  const pictureY = paintingPlacementY + paintingFrameThickness;
+
+  rect(paintingPlacementX, paintingPlacementY, paintingWidth, paintingHeight);
+
+  fill(pictureSkyColour);
+  noStroke();
+  rect(pictureX, pictureY, paintingWidth - (paintingFrameThickness * 2), paintingHeight - (paintingFrameThickness * 2));
+
+
+  const colourChoices = ['#97f84a', '#f8e501', '#286490', '#f45552', '#8e559c', '#f36d29'];
+  if (!paintingLinesGenerated) {
+    paintingLinesGenerated = true;
+    for (let i = 0; i < 6; i++) {
+      const chosenColour = colourChoices[Math.floor(Math.random() * colourChoices.length)];
+      const y1 = random(0, paintingHeight - (paintingFrameThickness * 2));
+      const y2 = random(0, paintingHeight - (paintingFrameThickness * 2));
+      lines.push(new DrawnLine(pictureX, pictureY + y1, pictureX + paintingWidth - (paintingFrameThickness * 2), pictureY + y2, chosenColour));
+    }
+  }
+
+  lines.forEach(function (drawnLine) {
+    strokeWeight(2);
+    stroke(drawnLine.colour);
+    line(drawnLine.x1, drawnLine.y1, drawnLine.x2, drawnLine.y2);
+  });
 }
