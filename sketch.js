@@ -216,18 +216,16 @@ function generateTableObjects(tableLength, tableHeight) {
     stroke('#000000');
     for (let i = 0; i < 20; i++) {
       const chosenObject = tableObjects[Math.floor(Math.random() * tableObjects.length)];
+      fill(random(0, 255), random(0, 255), random(0, 255));
       if (chosenObject === 'box') {
-        fill(random(0, 255), random(0, 255), random(0, 255));
         const box = new Box(random((windowWidth * 0.01), (windowWidth * 0.03)), random((windowHeight * 0.05), (windowHeight * 0.1)));
         const boxPlacement = random(baseX, baseX + tableLength - box.width);
         rect(boxPlacement, baseY - box.height, box.width, box.height);
       } else if (chosenObject === 'bowl') {
-        fill(random(0, 255), random(0, 255), random(0, 255));
         const bowl = new Bowl(random((windowWidth * 0.03), (windowWidth * 0.06)), random((windowHeight * 0.01), (windowHeight * 0.1)));
         const bowlPlacement = random(baseX + bowl.width, baseX + tableLength - bowl.width);
         arc(bowlPlacement, baseY - (bowl.height / 2), bowl.width, bowl.height, 0, PI, CHORD);
       } else {  // sphere
-        fill(random(0, 255), random(0, 255), random(0, 255));
         const sphere = new Sphere(random((windowWidth * 0.01), (windowWidth * 0.03)));
         const spherePlacement = random(baseX + (sphere.diameter / 2), baseX + tableLength - (sphere.diameter / 2));
         circle(spherePlacement, baseY - (sphere.diameter / 2), sphere.diameter);
