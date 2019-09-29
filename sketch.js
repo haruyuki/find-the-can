@@ -19,7 +19,7 @@ const canLocations = ['floor', 'table', 'bookshelf', 'painting'];
 const canLocation = canLocations[Math.floor(Math.random() * canLocations.length)];
 
 const tableObjects = ['box', 'box', 'box', 'bowl', 'sphere', 'sphere'];
-const bookshelfObjects = ['box','sphere'];
+const bookshelfObjects = ['box', 'sphere', 'triangle'];
 function Box(width, height) {
   this.width = width;
   this.height = height;
@@ -32,6 +32,11 @@ function Bowl(width, height) {
 
 function Sphere(diameter) {
   this.diameter = diameter;
+}
+
+function Triangle(width, height) {
+  this.width = width;
+  this.height = height;
 }
 
 function Can(x, y) {
@@ -243,7 +248,11 @@ function generateBookshelfObjects(bookshelfLength, bookshelfHeight, bookshelfPla
         const box = new Box(random((windowWidth * 0.01), (windowWidth * 0.03)), random((windowHeight * 0.05), (windowHeight * 0.1)));
         const boxPlacement = random(outerX, outerX + bookshelfLength - box.width);
         rect(boxPlacement, outerY - box.height, box.width, box.height);
-      } else {
+      } else if (chosenObject === 'triangle') {
+        const triangleShape = new Triangle(random((windowWidth * 0.01), (windowWidth * 0.03)), random((windowHeight * 0.05), (windowHeight * 0.1)));
+        const trianglePlacement = random(outerX, outerX + bookshelfLength - triangleShape.width);
+        triangle(trianglePlacement, outerY, trianglePlacement + triangleShape.width, outerY, trianglePlacement + (triangleShape.width / 2), outerY - triangleShape.height);
+      } else { // sphere
         const sphere = new Sphere(random((windowWidth * 0.01), (windowWidth * 0.03)));
         const spherePlacement = random(outerX + (sphere.diameter / 2), outerX + bookshelfLength - (sphere.diameter / 2));
         circle(spherePlacement, outerY - (sphere.diameter / 2), sphere.diameter);
