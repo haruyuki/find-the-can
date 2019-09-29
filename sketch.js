@@ -1,6 +1,6 @@
 let floorSeed, tableSeed;
 
-const wallColour = '#faf0dc';
+const wallColours = ['#faf0dc', '#d13202', '#6aa72e', '#c1c2c4', '#b995bd', '#3988c4'];
 const floorColour = '#cd9169';
 const bookshelfColour = '#fbfaf8';
 const bookshelfOffsetColour = '#ccc0a8';
@@ -59,7 +59,7 @@ function setup() {
   }
   Can.width = windowWidth * 0.02;
   Can.height = windowHeight * 0.02;
-  background(wallColour);
+  background(wallColours[Math.floor(Math.random() * wallColours.length)]);
   floorSeed = random(windowHeight - (windowHeight * 0.2), windowHeight - (windowHeight * 0.1));
   tableSeed = random(0, windowWidth - (windowWidth * 0.15));
 }
