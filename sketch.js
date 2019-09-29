@@ -1,4 +1,4 @@
-let floorSeed, tableSeed;
+let floorSeed, tableSeed, floorColour;
 
 const wallColours = ['#faf0dc', '#d13202', '#6aa72e', '#c1c2c4', '#b995bd', '#3988c4'];
 const floorColours = ['#8b5a2b', '#ffa54f', '#a0522d', '#cd8500', '#8b4513'];
@@ -84,10 +84,10 @@ function livingRoom() {
 
 function generateFloor() {
   noStroke();
-  let floorColour;
+
   if (!floorColourGenerated) {
     floorColourGenerated = true;
-    floorColour = floorColours[Math.floor(Math.random() * floorColours.length)];
+    floorColour = color(floorColours[Math.floor(Math.random() * floorColours.length)]);
   }
   fill(floorColour);
   rect(0, floorSeed, windowWidth, windowHeight);
