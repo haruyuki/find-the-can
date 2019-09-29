@@ -12,7 +12,7 @@ const pictureSkyColour = '#87ceeb';
 let bookColours = [];
 let booksGenerated = false;
 let bookshelfLocationGenerated = false;
-let paintingSizeGenerated = false;
+let paintingFrameGenerated = false;
 let paintingLinesGenerated = false;
 let tableObjectsGenerated = false;
 let bookshelfObjectsGenerated = false;
@@ -195,23 +195,37 @@ function generatePainting() {
   strokeWeight(5);
   stroke(paintingFrameOffsetColour);
 
-  let paintingWidth, paintingHeight, paintingPlacementX, paintingPlacementY;
-  if (!paintingSizeGenerated) {
-    paintingSizeGenerated = true;
+  let paintingWidth, paintingHeight, paintingPlacementX, paintingPlacementY, paintingFrameThickness, pictureX, pictureY;
+  if (!paintingFrameGenerated) {
+    paintingFrameGenerated = true;
     paintingWidth = random(windowWidth * 0.1, windowWidth * 0.3);
     paintingHeight = random(windowWidth * 0.075, windowWidth * 0.15);
     paintingPlacementX = random(0, windowWidth - paintingWidth);
     paintingPlacementY = random(0, windowHeight * 0.2);
+
+    paintingFrameThickness = 10;
+    pictureX = paintingPlacementX + paintingFrameThickness;
+    pictureY = paintingPlacementY + paintingFrameThickness;
+
+    rect(paintingPlacementX, paintingPlacementY, paintingWidth, paintingHeight);
+
+    fill(pictureSkyColour);
+    noStroke();
+    rect(pictureX, pictureY, paintingWidth - (paintingFrameThickness * 2), paintingHeight - (paintingFrameThickness * 2));
+
+    if (canLocation === 'painting') {
+      const can = new Can(-canWidth/2, canHeight/2);
+      const longest = max(canWidth, canHeight);
+      const canPlacementX = random(pictureX + longest, pictureX + paintingWidth - (paintingFrameThickness * 2) - longest);
+      const canPlacementY = random(pictureY + longest, pictureY + paintingHeight - (paintingFrameThickness * 2) - longest);
+      const canRotation = random(0, 2 * PI);
+      translate(canPlacementX, canPlacementY);
+      rotate(canRotation);
+      can.drawCan();
+      rotate(-canRotation);
+      translate(-canPlacementX, -canPlacementY)
+    }
   }
-  const paintingFrameThickness = 10;
-  const pictureX = paintingPlacementX + paintingFrameThickness;
-  const pictureY = paintingPlacementY + paintingFrameThickness;
-
-  rect(paintingPlacementX, paintingPlacementY, paintingWidth, paintingHeight);
-
-  fill(pictureSkyColour);
-  noStroke();
-  rect(pictureX, pictureY, paintingWidth - (paintingFrameThickness * 2), paintingHeight - (paintingFrameThickness * 2));
   return [paintingWidth, paintingHeight, pictureX, pictureY, paintingFrameThickness];
 }
 
@@ -220,6 +234,7 @@ function generatePaintingArtwork(paintingWidth, paintingHeight, pictureX, pictur
 
   if (!paintingLinesGenerated) {
     paintingLinesGenerated = true;
+
     for (let i = 0; i < 6; i++) {
       const chosenColour = colourChoices[Math.floor(Math.random() * colourChoices.length)];
       const y1 = random(0, paintingHeight - (paintingFrameThickness * 2));
@@ -288,12 +303,18 @@ function generateBookshelfObjects(bookshelfLength, bookshelfHeight, bookshelfPla
         circle(spherePlacement, outerY - (sphere.diameter / 2), sphere.diameter);
       }
     }
+    if (canLocation === 'bookshelf') {
+      const canPlacement = random(bookshelfPlacement, bookshelfPlacement + bookshelfLength - canWidth);
+      const can = new Can(canPlacement, floorSeed - bookshelfHeight);
+      can.drawCan();
+    }
   }
 }
 
 function generateFloorObjects() {
   if (!floorObjectsGenerated) {
     floorObjectsGenerated = true;
+    stroke(0);
     for (let i = 0; i < 30; i++) {
       const chosenObject = floorObjects[Math.floor(Math.random() * floorObjects.length)];
       fill(random(0, 255), random(0, 255), random(0, 255));
@@ -310,6 +331,12 @@ function generateFloorObjects() {
         const spherePlacement = random(sphere.diameter / 2, windowWidth - (sphere.diameter / 2));
         circle(spherePlacement, floorSeed - (sphere.diameter /2), sphere.diameter);
       }
+    }
+    console.log(canLocation);
+    if (canLocation === 'floor') {
+      const canPlacement = random(0, windowWidth - canWidth);
+      const can = new Can(canPlacement, floorSeed);
+      can.drawCan();
     }
   }
 }
