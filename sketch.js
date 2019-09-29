@@ -14,10 +14,12 @@ let bookshelfLocationGenerated = false;
 let paintingSizeGenerated = false;
 let paintingLinesGenerated = false;
 let tableObjectsGenerated = false;
+let bookshelfObjectsGenerated = false;
 const canLocations = ['floor', 'table', 'bookshelf', 'painting'];
 const canLocation = canLocations[Math.floor(Math.random() * canLocations.length)];
 
-const objects = ['box', 'box', 'box', 'bowl', 'sphere', 'sphere'];
+const tableObjects = ['box', 'box', 'box', 'bowl', 'sphere', 'sphere'];
+const bookshelfObjects = ['box','sphere'];
 function Box(width, height) {
   this.width = width;
   this.height = height;
@@ -63,9 +65,10 @@ function draw() {
 function livingRoom() {
   const paintingData = generatePainting();
   generatePaintingArtwork(paintingData[0], paintingData[1], paintingData[2], paintingData[3], paintingData[4]);
-  generateBookshelf();
+  const bookshelfData = generateBookshelf();
   const tableData = generateTable();
   generateTableObjects(tableData[0], tableData[1]);
+  generateBookshelfObjects(bookshelfData[0], bookshelfData[1], bookshelfData[2]);
   generateFloor();
 }
 
@@ -136,6 +139,7 @@ function generateBookshelf() {
       }
     }
   }
+  return [bookshelfLength, bookshelfHeight, bookshelfPlacement];
 }
 
 function generateTable() {
@@ -203,7 +207,7 @@ function generateTableObjects(tableLength, tableHeight) {
     strokeWeight(1.5);
     stroke('#000000');
     for (let i = 0; i < 20; i++) {
-      const chosenObject = objects[Math.floor(Math.random() * objects.length)];
+      const chosenObject = tableObjects[Math.floor(Math.random() * tableObjects.length)];
       if (chosenObject === 'box') {
         fill(random(0, 255), random(0, 255), random(0, 255));
         const box = new Box(random((windowWidth * 0.01), (windowWidth * 0.03)), random((windowHeight * 0.05), (windowHeight * 0.1)));
@@ -219,6 +223,30 @@ function generateTableObjects(tableLength, tableHeight) {
         const sphere = new Sphere(random((windowWidth * 0.01), (windowWidth * 0.03)));
         const spherePlacement = random(baseX + (sphere.diameter / 2), baseX + tableLength - (sphere.diameter / 2));
         circle(spherePlacement, baseY - (sphere.diameter / 2), sphere.diameter);
+      }
+    }
+  }
+}
+
+function generateBookshelfObjects(bookshelfLength, bookshelfHeight, bookshelfPlacement) {
+  const outerX = bookshelfPlacement;
+  const outerY = floorSeed - bookshelfHeight;
+
+  if (!bookshelfObjectsGenerated) {
+    bookshelfObjectsGenerated = true;
+    strokeWeight(1.5);
+    stroke('#000000');
+    for (let i = 0; i < 15; i++) {
+      const chosenObject = bookshelfObjects[Math.floor(Math.random() * bookshelfObjects.length)];
+      fill(random(0, 255), random(0, 255), random(0, 255));
+      if (chosenObject === 'box') {
+        const box = new Box(random((windowWidth * 0.01), (windowWidth * 0.03)), random((windowHeight * 0.05), (windowHeight * 0.1)));
+        const boxPlacement = random(outerX, outerX + bookshelfLength - box.width);
+        rect(boxPlacement, outerY - box.height, box.width, box.height);
+      } else {
+        const sphere = new Sphere(random((windowWidth * 0.01), (windowWidth * 0.03)));
+        const spherePlacement = random(outerX + (sphere.diameter / 2), outerX + bookshelfLength - (sphere.diameter / 2));
+        circle(spherePlacement, outerY - (sphere.diameter / 2), sphere.diameter);
       }
     }
   }
