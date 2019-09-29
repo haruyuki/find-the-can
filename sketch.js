@@ -394,7 +394,7 @@ function gameCompleteScreen() {
       translate(placementX, placementY);
       rotate(canRotation);
       const can = new Can(0, 0, canColour);
-      can.drawCan()
+      can.drawCan();
       rotate(-canRotation);
       translate(-placementX, -placementY);
     }
