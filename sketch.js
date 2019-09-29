@@ -4,6 +4,7 @@ const wallColours = ['#faf0dc', '#d13202', '#6aa72e', '#c1c2c4', '#b995bd', '#39
 const floorColour = '#cd9169';
 const bookshelfColour = '#fbfaf8';
 const bookshelfOffsetColour = '#ccc0a8';
+const bookshelfShadingColour = '#dfd7c7';
 const tableColour = '#d5a16a';
 const paintingFrameColour = '#eeeeee';
 const paintingFrameOffsetColour = '#c8c8c8';
@@ -110,7 +111,7 @@ function generateBookshelf() {
   const innerY = outerY + bookshelfThickness;
 
   rect(outerX, outerY, bookshelfLength + bookshelfThickness, bookshelfHeight);
-  fill(bookshelfColour);
+  fill(bookshelfShadingColour);
   rect(innerX, innerY, bookshelfLength - 10, bookshelfHeight - 20);
 
   const shelfLength = bookshelfLength / 4;
