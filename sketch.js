@@ -65,6 +65,17 @@ function Can(x, y, colour) {
     triangle(this.x, this.y - (canHeight * 0.92), this.x + (canWidth * 0.1), this.y - (canHeight * 0.92), this.x + (canWidth * 0.1), this.y - canHeight);
     rect(this.x +(canWidth * 0.1), this.y - canHeight, canWidth * 0.8, canHeight * 0.08);
     triangle(this.x + (canWidth * 0.9), this.y - (canHeight * 0.92), this.x + (canWidth * 0.9), this.y - canHeight, this.x + canWidth, this.y - (canHeight * 0.92));
+
+    stroke(0);
+    strokeWeight(0.5);
+    line(this.x, this.y - (canHeight * 0.08), this.x + (canWidth * 0.1), this.y);
+    line(this.x + (canWidth * 0.1), this.y, this.x + (canWidth * 0.9), this.y);
+    line(this.x + (canWidth * 0.9), this.y, this.x + canWidth, this.y - (canHeight * 0.08));
+    line(this.x + canWidth, this.y - (canHeight * 0.08), this.x + canWidth, this.y - (canHeight * 0.92));
+    line(this.x + canWidth, this.y - (canHeight * 0.92), this.x + (canWidth * 0.9), this.y - canHeight);
+    line(this.x + (canWidth * 0.9), this.y - canHeight, this.x + (canWidth * 0.1), this.y - canHeight);
+    line(this.x + (canWidth * 0.1), this.y - canHeight, this.x, this.y - (canHeight * 0.92));
+    line(this.x, this.y - (canHeight * 0.92), this.x, this.y - (canHeight * 0.08));
   };
 }
 
