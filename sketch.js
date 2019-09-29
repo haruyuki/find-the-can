@@ -253,7 +253,7 @@ function generateBookshelfObjects(bookshelfLength, bookshelfHeight, bookshelfPla
       const chosenObject = bookshelfObjects[Math.floor(Math.random() * bookshelfObjects.length)];
       fill(random(0, 255), random(0, 255), random(0, 255));
       if (chosenObject === 'box') {
-        const box = new Box(random((windowWidth * 0.01), (windowWidth * 0.03)), random((windowHeight * 0.05), (windowHeight * 0.1)));
+        const box = new Box(random((windowWidth * 0.01), (windowWidth * 0.04)), random((windowHeight * 0.02), (windowHeight * 0.05)));
         const boxPlacement = random(outerX, outerX + bookshelfLength - box.width);
         rect(boxPlacement, outerY - box.height, box.width, box.height);
       } else if (chosenObject === 'triangle') {
