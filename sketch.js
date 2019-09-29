@@ -1,4 +1,4 @@
-let floorSeed, tableSeed, floorColour;
+let floorSeed, tableSeed, floorColour, canWidth, canHeight;
 
 const wallColours = ['#faf0dc', '#d13202', '#6aa72e', '#c1c2c4', '#b995bd', '#3988c4'];
 const floorColours = ['#8b5a2b', '#ffa54f', '#a0522d', '#cd8500', '#8b4513'];
@@ -20,7 +20,6 @@ let floorObjectsGenerated = false;
 let floorColourGenerated = false;
 const canLocations = ['floor', 'table', 'bookshelf', 'painting'];
 const canLocation = canLocations[Math.floor(Math.random() * canLocations.length)];
-
 const tableObjects = ['box', 'box', 'box', 'bowl', 'sphere', 'sphere'];
 const bookshelfObjects = ['box', 'sphere', 'triangle'];
 const floorObjects = ['sphere', 'box', 'box', 'triangle', 'triangle'];
@@ -44,9 +43,25 @@ function Triangle(width, height) {
 }
 
 function Can(x, y) {
+  this.red = '#f32100';
+  this.silver = '#b3b3b3';
   this.x = x;
   this.y = y;
-  this.location = canLocation;
+  this.drawCan = function () {
+    noStroke();
+    fill(this.silver);
+    triangle(this.x, this.y - (canHeight * 0.08), this.x + (canWidth * 0.1), this.y, this.x + (canWidth * 0.1), this.y - (canHeight * 0.08));
+    rect(this.x + (canWidth * 0.1), this.y - (canHeight * 0.08), canWidth * 0.8, canHeight * 0.08);
+    triangle(this.x + (canWidth * 0.9), this.y, this.x + (canWidth * 0.9), this.y - (canHeight * 0.08), this.x + canWidth, this.y - (canHeight * 0.08));
+
+    fill(this.red);
+    rect(this.x, this.y - (canHeight * 0.92), canWidth, canHeight - (canHeight * 0.16));
+
+    fill(this.silver);
+    triangle(this.x, this.y - (canHeight * 0.92), this.x + (canWidth * 0.1), this.y - (canHeight * 0.92), this.x + (canWidth * 0.1), this.y - canHeight);
+    rect(this.x +(canWidth * 0.1), this.y - canHeight, canWidth * 0.8, canHeight * 0.08);
+    triangle(this.x + (canWidth * 0.9), this.y - (canHeight * 0.92), this.x + (canWidth * 0.9), this.y - canHeight, this.x + canWidth, this.y - (canHeight * 0.92));
+  };
 }
 
 function preload() {
@@ -59,11 +74,11 @@ function setup() {
   for (let i = 0; i < 60; i++) {
     bookColours.push(color(random(0, 255), random(0, 255), random(0, 255)));
   }
-  Can.width = windowWidth * 0.02;
-  Can.height = windowHeight * 0.02;
   background(wallColours[Math.floor(Math.random() * wallColours.length)]);
   floorSeed = random(windowHeight - (windowHeight * 0.2), windowHeight - (windowHeight * 0.1));
   tableSeed = random(0, windowWidth - (windowWidth * 0.15));
+  canWidth = windowWidth  * 0.02;
+  canHeight = windowHeight * 0.06;
 }
 
 function draw() {
