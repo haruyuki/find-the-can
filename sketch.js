@@ -15,6 +15,30 @@ let booksGenerated = false;
 let bookshelfLocationGenerated = false;
 let paintingSizeGenerated = false;
 let paintingLinesGenerated = false;
+let tableObjectsGenerated = false;
+const canLocations = ['floor', 'table', 'bookshelf', 'painting'];
+const canLocation = canLocations[Math.floor(Math.random() * canLocations.length)];
+
+const objects = ['box', 'box', 'box', 'bowl', 'sphere', 'sphere'];
+function Box(width, height) {
+  this.width = width;
+  this.height = height;
+}
+
+function Bowl(width, height) {
+  this.width = width;
+  this.height = height;
+}
+
+function Sphere(diameter) {
+  this.diameter = diameter;
+}
+
+function Can(x, y) {
+  this.x = x;
+  this.y = y;
+  this.location = canLocation;
+}
 
 function preload() {
   // load any assets (images, sounds etc.) here
@@ -26,6 +50,8 @@ function setup() {
   for (let i = 0; i < 60; i++) {
     bookColours.push(color(random(0, 255), random(0, 255), random(0, 255)));
   }
+  Can.width = windowWidth * 0.02;
+  Can.height = windowHeight * 0.02;
   background(wallColour);
   floorSeed = random(windowHeight - (windowHeight * 0.2), windowHeight - (windowHeight * 0.1));
   tableSeed = random(0, windowWidth - (windowWidth * 0.15));
@@ -40,8 +66,9 @@ function livingRoom() {
   const paintingData = generatePainting();
   generatePaintingArtwork(paintingData[0], paintingData[1], paintingData[2], paintingData[3], paintingData[4]);
   generateBookshelf();
-  generateTable();
+  const tableData = generateTable();
   generateFloor();
+  generateTableObjects(tableData[0], tableData[1]);
 }
 
 function generateFloor() {
@@ -119,6 +146,8 @@ function generateTable() {
   rect(baseX, baseY, tableThickness, tableHeight);
   rect(baseX, baseY, tableLength, tableThickness);
   rect(baseX + tableLength - tableThickness, baseY, tableThickness, tableHeight);
+
+  return [tableLength, tableHeight];
 }
 
 function generatePainting() {
@@ -172,4 +201,34 @@ function generatePaintingArtwork(paintingWidth, paintingHeight, pictureX, pictur
     stroke(drawnLine.colour);
     line(drawnLine.x1, drawnLine.y1, drawnLine.x2, drawnLine.y2);
   });
+}
+
+function generateTableObjects(tableLength, tableHeight) {
+  const baseX = tableSeed;
+  const baseY = floorSeed - tableHeight;
+
+  if (!tableObjectsGenerated) {
+    tableObjectsGenerated = true;
+    stroke('#000000');
+    for (i = 0; i < 20; i++) {
+      const chosenObject = objects[Math.floor(Math.random() * objects.length)];
+      if (chosenObject === 'box') {
+        fill(random(0, 255), random(0, 255), random(0, 255));
+        const box = new Box(random((windowWidth * 0.01), (windowWidth * 0.03)), random((windowHeight * 0.05), (windowHeight * 0.1)));
+        const boxPlacement = random(baseX, baseX + tableLength - box.width);
+        rect(boxPlacement, baseY - box.height, box.width, box.height);
+      } else if (chosenObject === 'bowl') {
+        fill(random(0, 255), random(0, 255), random(0, 255));
+        const bowl = new Bowl(random((windowWidth * 0.03), (windowWidth * 0.06)), random((windowHeight * 0.01), (windowHeight * 0.1)));
+        const bowlPlacement = random(baseX + bowl.width, baseX + tableLength - bowl.width);
+        arc(bowlPlacement, baseY - (bowl.height / 2), bowl.width, bowl.height, 0, PI, CHORD);
+      } else {  // sphere
+        fill(random(0, 255), random(0, 255), random(0, 255));
+        const sphere = new Sphere(random((windowWidth * 0.01), (windowWidth * 0.03)));
+        const spherePlacement = random(baseX + (sphere.diameter / 2), baseX + tableLength - (sphere.diameter / 2));
+        circle(spherePlacement, baseY - (sphere.diameter / 2), sphere.diameter);
+
+      }
+    }
+  }
 }
