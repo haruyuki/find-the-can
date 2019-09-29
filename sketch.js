@@ -19,7 +19,8 @@ let bookshelfObjectsGenerated = false;
 let floorObjectsGenerated = false;
 let floorColourGenerated = false;
 let tableGenerated = false;
-const canLocations = ['floor', 'table', 'bookshelf', 'painting'];
+let gameComplete = false;
+const canLocations = ['painting'];
 const canLocation = canLocations[Math.floor(Math.random() * canLocations.length)];
 const tableObjects = ['box', 'box', 'box', 'bowl', 'sphere', 'sphere'];
 const bookshelfObjects = ['box', 'sphere', 'triangle'];
@@ -83,7 +84,11 @@ function setup() {
 
 function draw() {
   // put drawing code here
-  livingRoom();
+  if (!gameComplete) {
+    livingRoom();
+  } else {
+    gameCompleteScreen();
+  }
 }
 
 function livingRoom() {
@@ -337,8 +342,24 @@ function generateFloorObjects() {
   }
 }
 
+function gameCompleteScreen() {
+  clear();
+  canWidth = windowWidth  * 0.2;
+  canHeight = windowHeight * 0.5;
+  const canPlacementX = (windowWidth / 2) - (canWidth / 2);
+  const canPlacementY = (windowHeight / 2) + (canHeight / 2) - (windowHeight * 0.2);
+  const can = new Can(canPlacementX, canPlacementY);
+  can.drawCan();
+  fill(0);
+  textSize(windowWidth * 0.04);
+  textAlign(CENTER, CENTER);
+  text("You found the can!", windowWidth / 2, windowHeight / 2 + (windowHeight * 0.2));
+  text("Never trust any can, except for the Red Can", windowWidth / 2, windowHeight / 2 + (windowHeight * 0.3))
+
+}
+
 function mouseClicked() {
   if ((mouseX >= canXPos && mouseX <= (canXPos + canWidth)) && (mouseY <= canYPos && mouseY >= (canYPos - canHeight))) {
-    console.log("CLICKED ON CAN!!!");
+    gameComplete = true;
   }
 }
