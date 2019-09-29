@@ -9,6 +9,8 @@ const tableColour = '#d5a16a';
 const paintingFrameColour = '#eeeeee';
 const paintingFrameOffsetColour = '#c8c8c8';
 const pictureSkyColour = '#87ceeb';
+const canColour = '#f32100';
+const otherCanColours = ['#3530db', '#248455', '#d6b40a', '#1f1d1e', '#f5941d'];
 let bookColours = [];
 let booksGenerated = false;
 let bookshelfLocationGenerated = false;
@@ -22,8 +24,8 @@ let tableGenerated = false;
 let gameComplete = false;
 const canLocations = ['floor', 'table', 'bookshelf', 'painting'];
 const canLocation = canLocations[Math.floor(Math.random() * canLocations.length)];
-const tableObjects = ['box', 'box', 'box', 'bowl', 'sphere', 'sphere'];
-const bookshelfObjects = ['box', 'sphere', 'triangle'];
+const tableObjects = ['can', 'can', 'can', 'bowl', 'sphere', 'sphere'];
+const bookshelfObjects = ['can', 'box', 'sphere', 'triangle'];
 const floorObjects = ['sphere', 'box', 'box', 'triangle', 'triangle'];
 function Box(width, height) {
   this.width = width;
@@ -44,8 +46,8 @@ function Triangle(width, height) {
   this.height = height;
 }
 
-function Can(x, y) {
-  this.red = '#f32100';
+function Can(x, y, colour) {
+  this.colour = colour;
   this.silver = '#b3b3b3';
   this.x = x;
   this.y = y;
@@ -56,7 +58,7 @@ function Can(x, y) {
     rect(this.x + (canWidth * 0.1), this.y - (canHeight * 0.08), canWidth * 0.8, canHeight * 0.08);
     triangle(this.x + (canWidth * 0.9), this.y, this.x + (canWidth * 0.9), this.y - (canHeight * 0.08), this.x + canWidth, this.y - (canHeight * 0.08));
 
-    fill(this.red);
+    fill(this.colour);
     rect(this.x, this.y - (canHeight * 0.92), canWidth, canHeight - (canHeight * 0.16));
 
     fill(this.silver);
@@ -221,7 +223,7 @@ function generatePainting() {
     if (canLocation === 'painting') {
       canXPos = random(pictureX, pictureX + paintingWidth - (paintingFrameThickness * 2) - canWidth);
       canYPos = random(pictureY + canHeight, pictureY + paintingHeight - (paintingFrameThickness * 2));
-      const can = new Can(canXPos, canYPos);
+      const can = new Can(canXPos, canYPos, canColour);
       can.drawCan();
     }
   }
@@ -255,10 +257,11 @@ function generateTableObjects(tableLength, tableHeight, tablePlacement) {
     for (let i = 0; i < 20; i++) {
       const chosenObject = tableObjects[Math.floor(Math.random() * tableObjects.length)];
       fill(random(0, 255), random(0, 255), random(0, 255));
-      if (chosenObject === 'box') {
-        const box = new Box(random((windowWidth * 0.01), (windowWidth * 0.03)), random((windowHeight * 0.05), (windowHeight * 0.1)));
-        const boxPlacement = random(tablePlacement, tablePlacement + tableLength - box.width);
-        rect(boxPlacement, baseY - box.height, box.width, box.height);
+      if (chosenObject === 'can') {
+        const canColour = otherCanColours[Math.floor(Math.random() * otherCanColours.length)];
+        const canPlacement = random(tablePlacement, tablePlacement + tableLength - canWidth);
+        const can = new Can(canPlacement, baseY, canColour);
+        can.drawCan();
       } else if (chosenObject === 'bowl') {
         const bowl = new Bowl(random((windowWidth * 0.03), (windowWidth * 0.06)), random((windowHeight * 0.01), (windowHeight * 0.1)));
         const bowlPlacement = random(tablePlacement + bowl.width, tablePlacement + tableLength - bowl.width);
@@ -272,7 +275,7 @@ function generateTableObjects(tableLength, tableHeight, tablePlacement) {
     if (canLocation === 'table') {
       canXPos = random(tablePlacement, tablePlacement + tableLength - canWidth);
       canYPos = baseY;
-      const can = new Can(canXPos, canYPos);
+      const can = new Can(canXPos, canYPos, canColour);
       can.drawCan();
     }
   }
@@ -297,6 +300,11 @@ function generateBookshelfObjects(bookshelfLength, bookshelfHeight, bookshelfPla
         const triangleShape = new Triangle(random((windowWidth * 0.01), (windowWidth * 0.03)), random((windowHeight * 0.05), (windowHeight * 0.1)));
         const trianglePlacement = random(outerX, outerX + bookshelfLength - triangleShape.width);
         triangle(trianglePlacement, outerY, trianglePlacement + triangleShape.width, outerY, trianglePlacement + (triangleShape.width / 2), outerY - triangleShape.height);
+      } else if (chosenObject === 'can') {
+        const canColour = otherCanColours[Math.floor(Math.random() * otherCanColours.length)];
+        const canPlacement = random(outerX, outerX + bookshelfLength - canWidth);
+        const can = new Can(canPlacement, outerY, canColour);
+        can.drawCan();
       } else { // sphere
         const sphere = new Sphere(random((windowWidth * 0.01), (windowWidth * 0.03)));
         const spherePlacement = random(outerX + (sphere.diameter / 2), outerX + bookshelfLength - (sphere.diameter / 2));
@@ -306,7 +314,7 @@ function generateBookshelfObjects(bookshelfLength, bookshelfHeight, bookshelfPla
     if (canLocation === 'bookshelf') {
       canXPos = random(bookshelfPlacement, bookshelfPlacement + bookshelfLength - canWidth);
       canYPos = floorSeed - bookshelfHeight;
-      const can = new Can(canXPos, canYPos);
+      const can = new Can(canXPos, canYPos, canColour);
       can.drawCan();
     }
   }
@@ -330,13 +338,13 @@ function generateFloorObjects() {
       } else { // sphere
         const sphere = new Sphere(random((windowWidth * 0.03), (windowWidth * 0.06)));
         const spherePlacement = random(sphere.diameter / 2, windowWidth - (sphere.diameter / 2));
-        circle(spherePlacement, floorSeed - (sphere.diameter /2), sphere.diameter);
+        circle(spherePlacement, floorSeed - (sphere.diameter / 2), sphere.diameter);
       }
     }
     if (canLocation === 'floor') {
       canXPos = random(0, windowWidth - canWidth);
       canYPos = floorSeed;
-      const can = new Can(canXPos, canYPos);
+      const can = new Can(canXPos, canYPos, canColour);
       can.drawCan();
     }
   }
@@ -348,12 +356,12 @@ function gameCompleteScreen() {
   canHeight = windowHeight * 0.5;
   const canPlacementX = (windowWidth / 2) - (canWidth / 2);
   const canPlacementY = (windowHeight / 2) + (canHeight / 2) - (windowHeight * 0.2);
-  const can = new Can(canPlacementX, canPlacementY);
+  const can = new Can(canPlacementX, canPlacementY, canColour);
   can.drawCan();
   fill(0);
   textSize(windowWidth * 0.04);
   textAlign(CENTER, CENTER);
-  text("You found the can!", windowWidth / 2, windowHeight / 2 + (windowHeight * 0.2));
+  text("You found the red can!", windowWidth / 2, windowHeight / 2 + (windowHeight * 0.2));
   text("Never trust any can, except for the Red Can", windowWidth / 2, windowHeight / 2 + (windowHeight * 0.3))
 
 }
