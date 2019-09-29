@@ -1,4 +1,4 @@
-let floorSeed, tableSeed, floorColour, canWidth, canHeight;
+let floorSeed, floorColour, canWidth, canHeight;
 
 const wallColours = ['#faf0dc', '#d13202', '#6aa72e', '#c1c2c4', '#b995bd', '#3988c4'];
 const floorColours = ['#8b5a2b', '#ffa54f', '#a0522d', '#cd8500', '#8b4513'];
@@ -18,6 +18,7 @@ let tableObjectsGenerated = false;
 let bookshelfObjectsGenerated = false;
 let floorObjectsGenerated = false;
 let floorColourGenerated = false;
+let tableGenerated = false;
 const canLocations = ['floor', 'table', 'bookshelf', 'painting'];
 const canLocation = canLocations[Math.floor(Math.random() * canLocations.length)];
 const tableObjects = ['box', 'box', 'box', 'bowl', 'sphere', 'sphere'];
@@ -76,7 +77,6 @@ function setup() {
   }
   background(wallColours[Math.floor(Math.random() * wallColours.length)]);
   floorSeed = random(windowHeight - (windowHeight * 0.2), windowHeight - (windowHeight * 0.1));
-  tableSeed = random(0, windowWidth - (windowWidth * 0.15));
   canWidth = windowWidth  * 0.02;
   canHeight = windowHeight * 0.06;
 }
@@ -91,7 +91,7 @@ function livingRoom() {
   generatePaintingArtwork(paintingData[0], paintingData[1], paintingData[2], paintingData[3], paintingData[4]);
   const bookshelfData = generateBookshelf();
   const tableData = generateTable();
-  generateTableObjects(tableData[0], tableData[1]);
+  generateTableObjects(tableData[0], tableData[1], tableData[2]);
   generateBookshelfObjects(bookshelfData[0], bookshelfData[1], bookshelfData[2]);
   generateFloorObjects();
   generateFloor();
@@ -173,18 +173,21 @@ function generateBookshelf() {
 }
 
 function generateTable() {
-  noStroke();
-  fill(tableColour);
-  const tableLength = (windowWidth * 0.4);
-  const tableHeight = (windowHeight * 0.25);
-  const baseX = tableSeed;
-  const baseY = floorSeed - tableHeight;
-  const tableThickness = 30;
-  rect(baseX, baseY, tableThickness, tableHeight);
-  rect(baseX, baseY, tableLength, tableThickness);
-  rect(baseX + tableLength - tableThickness, baseY, tableThickness, tableHeight);
-
-  return [tableLength, tableHeight];
+  let tableLength, tableHeight, tablePlacement;
+  if (!tableGenerated) {
+    tableGenerated = true;
+    noStroke();
+    fill(tableColour);
+    tableLength = random(windowWidth * 0.2, windowWidth * 0.4);
+    tableHeight = random(windowHeight * 0.2, windowHeight * 0.25);
+    tablePlacement = random((-tableLength) / 2, windowWidth - (tableLength / 2));
+    const baseY = floorSeed - tableHeight;
+    const tableThickness = 30;
+    rect(tablePlacement, baseY, tableThickness, tableHeight);
+    rect(tablePlacement, baseY, tableLength, tableThickness);
+    rect(tablePlacement + tableLength - tableThickness, baseY, tableThickness, tableHeight);
+  }
+  return [tableLength, tableHeight, tablePlacement];
 }
 
 function generatePainting() {
@@ -228,8 +231,7 @@ function generatePaintingArtwork(paintingWidth, paintingHeight, pictureX, pictur
   }
 }
 
-function generateTableObjects(tableLength, tableHeight) {
-  const baseX = tableSeed;
+function generateTableObjects(tableLength, tableHeight, tablePlacement) {
   const baseY = floorSeed - tableHeight;
 
   if (!tableObjectsGenerated) {
@@ -241,17 +243,22 @@ function generateTableObjects(tableLength, tableHeight) {
       fill(random(0, 255), random(0, 255), random(0, 255));
       if (chosenObject === 'box') {
         const box = new Box(random((windowWidth * 0.01), (windowWidth * 0.03)), random((windowHeight * 0.05), (windowHeight * 0.1)));
-        const boxPlacement = random(baseX, baseX + tableLength - box.width);
+        const boxPlacement = random(tablePlacement, tablePlacement + tableLength - box.width);
         rect(boxPlacement, baseY - box.height, box.width, box.height);
       } else if (chosenObject === 'bowl') {
         const bowl = new Bowl(random((windowWidth * 0.03), (windowWidth * 0.06)), random((windowHeight * 0.01), (windowHeight * 0.1)));
-        const bowlPlacement = random(baseX + bowl.width, baseX + tableLength - bowl.width);
+        const bowlPlacement = random(tablePlacement + bowl.width, tablePlacement + tableLength - bowl.width);
         arc(bowlPlacement, baseY - (bowl.height / 2), bowl.width, bowl.height, 0, PI, CHORD);
       } else {  // sphere
         const sphere = new Sphere(random((windowWidth * 0.01), (windowWidth * 0.03)));
-        const spherePlacement = random(baseX + (sphere.diameter / 2), baseX + tableLength - (sphere.diameter / 2));
+        const spherePlacement = random(tablePlacement + (sphere.diameter / 2), tablePlacement + tableLength - (sphere.diameter / 2));
         circle(spherePlacement, baseY - (sphere.diameter / 2), sphere.diameter);
       }
+    }
+    if (canLocation === 'table') {
+      const canPlacement = random(tablePlacement, tablePlacement + tableLength - canWidth);
+      const can = new Can(canPlacement, baseY);
+      can.drawCan();
     }
   }
 }
