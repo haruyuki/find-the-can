@@ -1,7 +1,7 @@
 let floorSeed, tableSeed;
 
 const wallColours = ['#faf0dc', '#d13202', '#6aa72e', '#c1c2c4', '#b995bd', '#3988c4'];
-const floorColour = '#cd9169';
+const floorColours = ['#8b5a2b', '#ffa54f', '#a0522d', '#cd8500', '#8b4513'];
 const bookshelfColour = '#fbfaf8';
 const bookshelfOffsetColour = '#ccc0a8';
 const bookshelfShadingColour = '#dfd7c7';
@@ -17,6 +17,7 @@ let paintingLinesGenerated = false;
 let tableObjectsGenerated = false;
 let bookshelfObjectsGenerated = false;
 let floorObjectsGenerated = false;
+let floorColourGenerated = false;
 const canLocations = ['floor', 'table', 'bookshelf', 'painting'];
 const canLocation = canLocations[Math.floor(Math.random() * canLocations.length)];
 
@@ -83,6 +84,11 @@ function livingRoom() {
 
 function generateFloor() {
   noStroke();
+  let floorColour;
+  if (!floorColourGenerated) {
+    floorColourGenerated = true;
+    floorColour = floorColours[Math.floor(Math.random() * floorColours.length)];
+  }
   fill(floorColour);
   rect(0, floorSeed, windowWidth, windowHeight);
 }
