@@ -22,6 +22,8 @@ let floorObjectsGenerated = false;
 let floorColourGenerated = false;
 let tableGenerated = false;
 let gameComplete = false;
+let screenCleared = false;
+let cansGenerated = false;
 const canLocations = ['floor', 'table', 'bookshelf', 'painting'];
 const canLocation = canLocations[Math.floor(Math.random() * canLocations.length)];
 const tableObjects = ['can', 'can', 'can', 'bowl', 'sphere', 'sphere'];
@@ -362,7 +364,10 @@ function generateFloorObjects() {
 }
 
 function gameCompleteScreen() {
-  clear();
+  if (!screenCleared) {
+    screenCleared = true;
+    clear();
+  }
   canWidth = windowWidth  * 0.2;
   canHeight = windowHeight * 0.5;
   const canPlacementX = (windowWidth / 2) - (canWidth / 2);
@@ -372,13 +377,32 @@ function gameCompleteScreen() {
   fill(0);
   textSize(windowWidth * 0.04);
   textAlign(CENTER, CENTER);
-  text("You found the red can!", windowWidth / 2, windowHeight / 2 + (windowHeight * 0.2));
-  text("Never trust any can, except for the Red Can", windowWidth / 2, windowHeight / 2 + (windowHeight * 0.3))
+  textFont('Helvetica');
+  text("You found the red can!", windowWidth / 2, windowHeight / 2 + (windowHeight * 0.1));
+  text("Never trust any can, except for the Red Can", windowWidth / 2, windowHeight / 2 + (windowHeight * 0.2));
 
+
+  if (!cansGenerated) {
+    cansGenerated = true;
+    canWidth = windowWidth  * 0.1;
+    canHeight = windowHeight * 0.3;
+    for (let i = 0; i < 50; i++) {
+      const placementX = random(0, windowWidth);
+      const placementY = random(windowHeight + (canHeight * 0.1), windowHeight + canHeight/2/2);
+      const canColour = otherCanColours[Math.floor(Math.random() * otherCanColours.length)];
+      const canRotation = random(0, 2 * PI);
+      translate(placementX, placementY);
+      rotate(canRotation);
+      const can = new Can(0, 0, canColour);
+      can.drawCan()
+      rotate(-canRotation);
+      translate(-placementX, -placementY);
+    }
+  }
 }
 
 function mouseClicked() {
-  if ((mouseX >= canXPos && mouseX <= (canXPos + canWidth)) && (mouseY <= canYPos && mouseY >= (canYPos - canHeight))) {
+  if (!gameComplete && (mouseX >= canXPos && mouseX <= (canXPos + canWidth)) && (mouseY <= canYPos && mouseY >= (canYPos - canHeight))) {
     gameComplete = true;
   }
 }
