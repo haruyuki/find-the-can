@@ -1,6 +1,5 @@
 let floorSeed, tableSeed;
 
-let transparent;
 const wallColour = '#faf0dc';
 const floorColour = '#cd9169';
 const bookshelfColour = '#fbfaf8';
@@ -24,7 +23,6 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   // put setup code here
-  transparent = color('rgba(0,0,0,0)');
   for (let i = 0; i < 60; i++) {
     bookColours.push(color(random(0, 255), random(0, 255), random(0, 255)));
   }
@@ -73,8 +71,9 @@ function generateBookshelf() {
   const outerY = floorSeed - bookshelfHeight;
   const innerX = outerX + bookshelfThickness;
   const innerY = outerY + bookshelfThickness;
+
   rect(outerX, outerY, bookshelfLength + bookshelfThickness, bookshelfHeight);
-  fill(transparent);
+  fill(bookshelfColour);
   rect(innerX, innerY, bookshelfLength - 10, bookshelfHeight - 20);
 
   const shelfLength = bookshelfLength / 4;
