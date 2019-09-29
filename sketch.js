@@ -37,7 +37,8 @@ function draw() {
 }
 
 function livingRoom() {
-  generatePainting();
+  const paintingData = generatePainting();
+  generatePaintingArtwork(paintingData[0], paintingData[1], paintingData[2], paintingData[3], paintingData[4]);
   generateBookshelf();
   generateTable();
   generateFloor();
@@ -121,14 +122,6 @@ function generateTable() {
 }
 
 function generatePainting() {
-  function DrawnLine(x1, y1, x2, y2, colour) {
-    this.x1 = x1;
-    this.y1 = y1;
-    this.x2 = x2;
-    this.y2 = y2;
-    this.colour = colour;
-  }
-
   fill(paintingFrameColour);
   strokeWeight(5);
   stroke(paintingFrameOffsetColour);
@@ -150,9 +143,20 @@ function generatePainting() {
   fill(pictureSkyColour);
   noStroke();
   rect(pictureX, pictureY, paintingWidth - (paintingFrameThickness * 2), paintingHeight - (paintingFrameThickness * 2));
+  return [paintingWidth, paintingHeight, pictureX, pictureY, paintingFrameThickness];
+}
 
+function generatePaintingArtwork(paintingWidth, paintingHeight, pictureX, pictureY, paintingFrameThickness) {
+  function DrawnLine(x1, y1, x2, y2, colour) {
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.colour = colour;
+  }
 
   const colourChoices = ['#97f84a', '#f8e501', '#286490', '#f45552', '#8e559c', '#f36d29'];
+
   if (!paintingLinesGenerated) {
     paintingLinesGenerated = true;
     for (let i = 0; i < 6; i++) {
