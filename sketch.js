@@ -100,6 +100,11 @@ function setup() {
 function draw() {
   // put drawing code here
   if (!gameComplete) {
+    noStroke();
+    textSize(windowWidth * 0.04);
+    textAlign(LEFT);
+    fill(0);
+    text("Click on the can.", windowWidth * 0.01, windowHeight * 0.1);
     livingRoom();
   } else {
     gameCompleteScreen();
