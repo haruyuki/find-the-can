@@ -173,8 +173,8 @@ function generatePainting() {
   let paintingWidth, paintingHeight, paintingPlacementX, paintingPlacementY;
   if (!paintingSizeGenerated) {
     paintingSizeGenerated = true;
-    paintingWidth = random(windowWidth * 0.05, windowWidth * 0.3);
-    paintingHeight = random(windowWidth * 0.05, windowWidth * 0.15);
+    paintingWidth = random(windowWidth * 0.1, windowWidth * 0.3);
+    paintingHeight = random(windowWidth * 0.075, windowWidth * 0.15);
     paintingPlacementX = random(0, windowWidth - paintingWidth);
     paintingPlacementY = random(0, windowHeight * 0.2);
   }
