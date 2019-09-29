@@ -9,7 +9,6 @@ const paintingFrameColour = '#eeeeee';
 const paintingFrameOffsetColour = '#c8c8c8';
 const pictureSkyColour = '#87ceeb';
 let bookColours = [];
-let books = [];
 let booksGenerated = false;
 let bookshelfLocationGenerated = false;
 let paintingSizeGenerated = false;
