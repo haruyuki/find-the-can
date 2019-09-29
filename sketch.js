@@ -180,7 +180,7 @@ function generateTable() {
     fill(tableColour);
     tableLength = random(windowWidth * 0.2, windowWidth * 0.4);
     tableHeight = random(windowHeight * 0.2, windowHeight * 0.25);
-    tablePlacement = random((-tableLength) / 2, windowWidth - (tableLength / 2));
+    tablePlacement = random(0, windowWidth - tableLength);
     const baseY = floorSeed - tableHeight;
     const tableThickness = 30;
     rect(tablePlacement, baseY, tableThickness, tableHeight);
