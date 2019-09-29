@@ -1,4 +1,4 @@
-let floorSeed, floorColour, canWidth, canHeight;
+let floorSeed, floorColour, canWidth, canHeight, canXPos, canYPos;
 
 const wallColours = ['#faf0dc', '#d13202', '#6aa72e', '#c1c2c4', '#b995bd', '#3988c4'];
 const floorColours = ['#8b5a2b', '#ffa54f', '#a0522d', '#cd8500', '#8b4513'];
@@ -214,16 +214,10 @@ function generatePainting() {
     rect(pictureX, pictureY, paintingWidth - (paintingFrameThickness * 2), paintingHeight - (paintingFrameThickness * 2));
 
     if (canLocation === 'painting') {
-      const can = new Can(-canWidth/2, canHeight/2);
-      const longest = max(canWidth, canHeight);
-      const canPlacementX = random(pictureX + longest, pictureX + paintingWidth - (paintingFrameThickness * 2) - longest);
-      const canPlacementY = random(pictureY + longest, pictureY + paintingHeight - (paintingFrameThickness * 2) - longest);
-      const canRotation = random(0, 2 * PI);
-      translate(canPlacementX, canPlacementY);
-      rotate(canRotation);
+      canXPos = random(pictureX, pictureX + paintingWidth - (paintingFrameThickness * 2) - canWidth);
+      canYPos = random(pictureY + canHeight, pictureY + paintingHeight - (paintingFrameThickness * 2));
+      const can = new Can(canXPos, canYPos);
       can.drawCan();
-      rotate(-canRotation);
-      translate(-canPlacementX, -canPlacementY)
     }
   }
   return [paintingWidth, paintingHeight, pictureX, pictureY, paintingFrameThickness];
@@ -271,8 +265,9 @@ function generateTableObjects(tableLength, tableHeight, tablePlacement) {
       }
     }
     if (canLocation === 'table') {
-      const canPlacement = random(tablePlacement, tablePlacement + tableLength - canWidth);
-      const can = new Can(canPlacement, baseY);
+      canXPos = random(tablePlacement, tablePlacement + tableLength - canWidth);
+      canYPos = baseY;
+      const can = new Can(canXPos, canYPos);
       can.drawCan();
     }
   }
@@ -304,8 +299,9 @@ function generateBookshelfObjects(bookshelfLength, bookshelfHeight, bookshelfPla
       }
     }
     if (canLocation === 'bookshelf') {
-      const canPlacement = random(bookshelfPlacement, bookshelfPlacement + bookshelfLength - canWidth);
-      const can = new Can(canPlacement, floorSeed - bookshelfHeight);
+      canXPos = random(bookshelfPlacement, bookshelfPlacement + bookshelfLength - canWidth);
+      canYPos = floorSeed - bookshelfHeight;
+      const can = new Can(canXPos, canYPos);
       can.drawCan();
     }
   }
@@ -332,11 +328,17 @@ function generateFloorObjects() {
         circle(spherePlacement, floorSeed - (sphere.diameter /2), sphere.diameter);
       }
     }
-    console.log(canLocation);
     if (canLocation === 'floor') {
-      const canPlacement = random(0, windowWidth - canWidth);
-      const can = new Can(canPlacement, floorSeed);
+      canXPos = random(0, windowWidth - canWidth);
+      canYPos = floorSeed;
+      const can = new Can(canXPos, canYPos);
       can.drawCan();
     }
+  }
+}
+
+function mouseClicked() {
+  if ((mouseX >= canXPos && mouseX <= (canXPos + canWidth)) && (mouseY <= canYPos && mouseY >= (canYPos - canHeight))) {
+    console.log("CLICKED ON CAN!!!");
   }
 }
