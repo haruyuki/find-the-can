@@ -15,11 +15,13 @@ let paintingSizeGenerated = false;
 let paintingLinesGenerated = false;
 let tableObjectsGenerated = false;
 let bookshelfObjectsGenerated = false;
+let floorObjectsGenerated = false;
 const canLocations = ['floor', 'table', 'bookshelf', 'painting'];
 const canLocation = canLocations[Math.floor(Math.random() * canLocations.length)];
 
 const tableObjects = ['box', 'box', 'box', 'bowl', 'sphere', 'sphere'];
 const bookshelfObjects = ['box', 'sphere', 'triangle'];
+const floorObjects = ['sphere', 'box', 'box', 'triangle', 'triangle'];
 function Box(width, height) {
   this.width = width;
   this.height = height;
@@ -74,6 +76,7 @@ function livingRoom() {
   const tableData = generateTable();
   generateTableObjects(tableData[0], tableData[1]);
   generateBookshelfObjects(bookshelfData[0], bookshelfData[1], bookshelfData[2]);
+  generateFloorObjects();
   generateFloor();
 }
 
@@ -256,6 +259,29 @@ function generateBookshelfObjects(bookshelfLength, bookshelfHeight, bookshelfPla
         const sphere = new Sphere(random((windowWidth * 0.01), (windowWidth * 0.03)));
         const spherePlacement = random(outerX + (sphere.diameter / 2), outerX + bookshelfLength - (sphere.diameter / 2));
         circle(spherePlacement, outerY - (sphere.diameter / 2), sphere.diameter);
+      }
+    }
+  }
+}
+
+function generateFloorObjects() {
+  if (!floorObjectsGenerated) {
+    floorObjectsGenerated = true;
+    for (let i = 0; i < 30; i++) {
+      const chosenObject = floorObjects[Math.floor(Math.random() * floorObjects.length)];
+      fill(random(0, 255), random(0, 255), random(0, 255));
+      if (chosenObject === 'box') {
+        const box = new Box(random((windowWidth * 0.05), (windowWidth * 0.1)), random((windowHeight * 0.03), (windowHeight * 0.05)));
+        const boxPlacement = random(0, windowWidth - box.width);
+        rect(boxPlacement, floorSeed - box.height, box.width, box.height);
+      } else if (chosenObject === 'triangle') {
+        const triangleShape = new Triangle(random((windowWidth * 0.01), (windowWidth * 0.08)), random((windowHeight * 0.03), (windowHeight * 0.05)));
+        const trianglePlacement = random(0, windowWidth - triangleShape.width);
+        triangle(trianglePlacement, floorSeed, trianglePlacement + triangleShape.width, floorSeed, trianglePlacement + (triangleShape.width / 2), floorSeed - triangleShape.height);
+      } else { // sphere
+        const sphere = new Sphere(random((windowWidth * 0.03), (windowWidth * 0.06)));
+        const spherePlacement = random(sphere.diameter / 2, windowWidth - (sphere.diameter / 2));
+        circle(spherePlacement, floorSeed - (sphere.diameter /2), sphere.diameter);
       }
     }
   }
